@@ -2,6 +2,7 @@
 #include "SFML/Graphics.hpp"
 #include "../CCircleDecorator/CCircleDecorator.h"
 #include "../CRectangleDecorator/CRectangleDecorator.h"
+#include "../CConvexDecorator/CConvexDecorator.h"
 
 class CShapesHandler
         {
@@ -17,6 +18,7 @@ private:
 
     sf::CircleShape GetCircle(std::string line);
     sf::RectangleShape GetRectangle(std::string line);
+    sf::ConvexShape GetTriangle(std::string line);
 
     std::istream& m_in;
     std::ostream& m_out;

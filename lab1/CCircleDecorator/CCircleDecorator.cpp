@@ -12,8 +12,8 @@ float CCircleDecorator::GetPerimeter()
     return perimeter;
 }
 
-CCircleDecorator::CCircleDecorator(const std::shared_ptr<sf::CircleShape> &shape) : CShapeDecorator(shape)
+CCircleDecorator::CCircleDecorator(const std::shared_ptr<sf::CircleShape> &shape, float radius) : CShapeDecorator(shape)
 {
-    m_radius = shape->getRadius();
+    m_radius = radius;
 }
 

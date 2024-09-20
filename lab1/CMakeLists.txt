@@ -12,5 +12,7 @@ add_executable(lab1 main.cpp
         CShapeHandler/CShapesHandler.cpp
         CShapeDecorator/CShapeDecorator.cpp
         CRectangleDecorator/CRectangleDecorator.cpp
+        CConvexDecorator/CConvexDecorator.h
+        CConvexDecorator/CConvexDecorator.cpp
 )
 target_link_libraries(lab1 sfml-graphics sfml-audio)

@@ -12,6 +12,9 @@ const std::string parseCircle = "C=(\\d+),(\\d+);\\s+R=(\\d+)";
 const std::string findRectangle = "RECTANGLE: ";
 const std::string parseRectangle = "P1=(\\d+),(\\d+);\\s+P2=(\\d+),(\\d+)";
 
+const std::string findTriangle = "TRIANGLE: ";
+const std::string parseTriangle= "P1=(\\d+),(\\d+);\\s+P2=(\\d+),(\\d+);\\s+P3=(\\d+),(\\d+)";
+
 CShapesHandler::CShapesHandler(std::istream &in, std::ostream &out, std::vector<std::shared_ptr<sf::Shape> >& shapes):
         m_in(in),
         m_out(out),
@@ -41,7 +44,7 @@ void CShapesHandler::GetShapes()
 
             this->m_shapes.push_back(circle);
 
-            auto circleDecorator = new CCircleDecorator(circle);
+            auto circleDecorator = new CCircleDecorator(circle, circle->getRadius());
 
             std::cout << circleDecorator->GetArea() << " " << circleDecorator->GetPerimeter() << std::endl;
         }
@@ -55,6 +58,17 @@ void CShapesHandler::GetShapes()
                     (rectangle, rectangle->getSize().x, rectangle->getSize().y);
 
             std::cout << rectangleDecorator->GetArea() << " " << rectangleDecorator->GetPerimeter() << std::endl;
+        }
+        else  if (line.find(findTriangle) != std::string::npos)
+        {
+            auto triangle = std::make_shared<sf::ConvexShape>(GetTriangle(line));
+
+            this->m_shapes.push_back(triangle);
+
+            auto triangleDecorator = new CConvexDecorator
+                    (triangle, triangle->getPoint(0), triangle->getPoint(0), triangle->getPoint(0));
+
+            std::cout << triangleDecorator->GetArea() << " " << triangleDecorator->GetPerimeter() << std::endl;
         }
     }
 }
@@ -120,7 +134,7 @@ sf::RectangleShape CShapesHandler::GetRectangle(std::string line)
     float x2 = std::stof(match[3]);
     float y2 = std::stof(match[4]);
 
-    std::cout << x1 << " " << y1  << " " << x2 << " " << y2 << std::endl;
+    //std::cout << x1 << " " << y1  << " " << x2 << " " << y2 << std::endl;
 
     sf::Vector2f points = sf::Vector2f(x1, y1);
     sf::RectangleShape rectangle = sf::RectangleShape();
@@ -133,4 +147,29 @@ sf::RectangleShape CShapesHandler::GetRectangle(std::string line)
     rectangle.setOutlineColor(sf::Color::Red);
 
     return rectangle;
+}
+
+sf::ConvexShape CShapesHandler::GetTriangle(std::string line) {
+    std::regex trianglePattern(parseTriangle);
+    std::smatch match;
+
+    std::regex_search(line, match, trianglePattern);
+    float x1 = std::stof(match[1]);
+    float y1 = std::stof(match[2]);
+    float x2 = std::stof(match[3]);
+    float y2 = std::stof(match[4]);
+    float x3 = std::stof(match[5]);
+    float y3 = std::stof(match[6]);
+
+    //std::cout << x1 << " " << y1  << " " << x2 << " " << y2 <<  x3 << " " << y3 << std::endl;
+
+    sf::ConvexShape triangle = sf::ConvexShape();
+    triangle.setPointCount(3);
+
+    triangle.setPoint(0, sf::Vector2f(x1, y1));
+    triangle.setPoint(1, sf::Vector2f(x2, y2));
+    triangle.setPoint(2, sf::Vector2f(x3, y3));
+    triangle.setFillColor(sf::Color::Magenta);
+
+    return triangle;
 }
