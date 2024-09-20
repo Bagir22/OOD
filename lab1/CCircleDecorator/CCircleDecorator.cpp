@@ -2,17 +2,17 @@
 
 float CCircleDecorator::GetArea()
 {
-    auto area = static_cast<float>(pow(m_radius, 2) * M_PI);
+    auto area = static_cast<float>(M_PI * pow(m_radius, 2));
     return area;
 }
 
 float CCircleDecorator::GetPerimeter()
 {
-    auto perimeter = static_cast<float>(M_PI * 2 * m_radius);
+    auto perimeter = static_cast<float>(M_PI * m_radius * 2);
     return perimeter;
 }
 
-CCircleDecorator::CCircleDecorator(const std::shared_ptr<sf::CircleShape>& shape) : CShapeDecorator(shape)
+CCircleDecorator::CCircleDecorator(const std::shared_ptr<sf::CircleShape> &shape) : CShapeDecorator(shape)
 {
     m_radius = shape->getRadius();
 }

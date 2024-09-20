@@ -1,5 +1,7 @@
 #include "iostream"
 #include "SFML/Graphics.hpp"
+#include "../CCircleDecorator/CCircleDecorator.h"
+#include "../CRectangleDecorator/CRectangleDecorator.h"
 
 class CShapesHandler
         {
@@ -14,6 +16,7 @@ private:
     void GetShapes();
 
     sf::CircleShape GetCircle(std::string line);
+    sf::RectangleShape GetRectangle(std::string line);
 
     std::istream& m_in;
     std::ostream& m_out;

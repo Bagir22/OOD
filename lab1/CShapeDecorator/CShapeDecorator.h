@@ -4,6 +4,9 @@
 #include <fstream>
 #include <string>
 
+#ifndef CSHAPEDECORATOR_H
+#define CSHAPEDECORATOR_H
+
 class CShapeDecorator : public sf::Shape
 {
 public:
@@ -18,3 +21,4 @@ private:
     std::shared_ptr<sf::Shape> m_shape;
 };
 
+#endif // CSHAPEDECORATOR_H

@@ -1,5 +1,4 @@
 #include "CShapesHandler.h"
-#include "../CCircleDecorator/CCircleDecorator.h"
 #include "regex"
 #include "SFML/Graphics.hpp"
 
@@ -8,7 +7,10 @@ const int windowsHeight = 1000;
 const std::string windowTitle = "Shapes";
 
 const std::string findCircle = "CIRCLE: ";
-const std::string parseCircle = "C=(-?\\d+),(-?\\d+);\\s+R=(-?\\d+)";
+const std::string parseCircle = "C=(\\d+),(\\d+);\\s+R=(\\d+)";
+
+const std::string findRectangle = "RECTANGLE: ";
+const std::string parseRectangle = "P1=(\\d+),(\\d+);\\s+P2=(\\d+),(\\d+)";
 
 CShapesHandler::CShapesHandler(std::istream &in, std::ostream &out, std::vector<std::shared_ptr<sf::Shape> >& shapes):
         m_in(in),
@@ -32,6 +34,7 @@ void CShapesHandler::GetShapes()
 
     while(std::getline(this->m_in, line))
     {
+        std::cout << line << std::endl;
         if (line.find(findCircle) != std::string::npos)
         {
             auto circle = std::make_shared<sf::CircleShape>(GetCircle(line));
@@ -40,7 +43,18 @@ void CShapesHandler::GetShapes()
 
             auto circleDecorator = new CCircleDecorator(circle);
 
-            //std::cout << circleDecorator->GetArea() << " " << circleDecorator->GetPerimeter() << std::endl;
+            std::cout << circleDecorator->GetArea() << " " << circleDecorator->GetPerimeter() << std::endl;
+        }
+        else  if (line.find(findRectangle) != std::string::npos)
+        {
+            auto rectangle = std::make_shared<sf::RectangleShape>(GetRectangle(line));
+
+            this->m_shapes.push_back(rectangle);
+
+            auto rectangleDecorator = new CRectangleDecorator
+                    (rectangle, rectangle->getSize().x, rectangle->getSize().y);
+
+            std::cout << rectangleDecorator->GetArea() << " " << rectangleDecorator->GetPerimeter() << std::endl;
         }
     }
 }
@@ -67,6 +81,7 @@ void CShapesHandler::Draw()
 
         window.clear(sf::Color::White);
 
+        //std::cout << this->m_shapes.size() << std::endl;
         for (int i = 0; i < this->m_shapes.size(); i++)
         {
             window.draw(*this->m_shapes[i]);
@@ -75,7 +90,8 @@ void CShapesHandler::Draw()
     }
 }
 
-sf::CircleShape CShapesHandler::GetCircle(std::string line) {
+sf::CircleShape CShapesHandler::GetCircle(std::string line)
+{
     std::regex circlePattern(parseCircle);
     std::smatch match;
 
@@ -90,4 +106,31 @@ sf::CircleShape CShapesHandler::GetCircle(std::string line) {
     circle.setFillColor(sf::Color::Blue);
 
     return circle;
+}
+
+sf::RectangleShape CShapesHandler::GetRectangle(std::string line)
+{
+    std::regex rectanglePattern(parseRectangle);
+    std::smatch match;
+
+    std::regex_search(line, match, rectanglePattern);
+
+    float x1 = std::stof(match[1]);
+    float y1 = std::stof(match[2]);
+    float x2 = std::stof(match[3]);
+    float y2 = std::stof(match[4]);
+
+    std::cout << x1 << " " << y1  << " " << x2 << " " << y2 << std::endl;
+
+    sf::Vector2f points = sf::Vector2f(x1, y1);
+    sf::RectangleShape rectangle = sf::RectangleShape();
+    rectangle.setPosition(points);
+
+    const float width = abs(x2 - x1);
+    const float height = abs(y2 - y1);
+    rectangle.setSize(sf::Vector2f(width, height));
+    rectangle.setFillColor(sf::Color::Green);
+    rectangle.setOutlineColor(sf::Color::Red);
+
+    return rectangle;
 }
