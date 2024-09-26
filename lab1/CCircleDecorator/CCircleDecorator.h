@@ -4,7 +4,7 @@
 class CCircleDecorator: public CShapeDecorator
         {
 public:
-    explicit CCircleDecorator(const std::shared_ptr<sf::CircleShape> &shape, float radius);
+    CCircleDecorator(const std::shared_ptr<sf::CircleShape> &shape, float radius);
 
     float GetArea() override;
     float GetPerimeter() override;

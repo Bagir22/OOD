@@ -3,14 +3,14 @@
 float CRectangleDecorator::GetArea()
 {
     auto area =  m_width * m_height;
-    //std::cout << "Rec Area  = " << area << std::endl;
+
     return area;
 }
 
 float CRectangleDecorator::GetPerimeter()
 {
     auto perimeter = 2 * (m_width + m_height);
-    //std::cout << "Rec Perimeter = " << perimeter << std::endl;
+
     return perimeter;
 }
 

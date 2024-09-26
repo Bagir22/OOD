@@ -6,14 +6,20 @@ const int windowWidth = 1000;
 const int windowsHeight = 1000;
 const std::string windowTitle = "Shapes";
 
-const std::string findCircle = "CIRCLE: ";
+const std::string circleStr = "CIRCLE: ";
 const std::string parseCircle = "C=(\\d+),(\\d+);\\s+R=(\\d+)";
 
-const std::string findRectangle = "RECTANGLE: ";
+const std::string rectangleStr = "RECTANGLE: ";
 const std::string parseRectangle = "P1=(\\d+),(\\d+);\\s+P2=(\\d+),(\\d+)";
 
-const std::string findTriangle = "TRIANGLE: ";
+const std::string triangleStr = "TRIANGLE: ";
 const std::string parseTriangle= "P1=(\\d+),(\\d+);\\s+P2=(\\d+),(\\d+);\\s+P3=(\\d+),(\\d+)";
+
+const std::string perimeter = "P=";
+const std::string area = "S=";
+
+const std::string unknownShape = "Unknown shape\n";
+const int precision = 2;
 
 CShapesHandler::CShapesHandler(std::istream &in, std::ostream &out, std::vector<std::shared_ptr<sf::Shape> >& shapes):
         m_in(in),
@@ -37,52 +43,66 @@ void CShapesHandler::GetShapes()
 
     while(std::getline(this->m_in, line))
     {
-        std::cout << line << std::endl;
-        if (line.find(findCircle) != std::string::npos)
+        if (line.find(circleStr) != std::string::npos)
         {
             auto circle = std::make_shared<sf::CircleShape>(GetCircle(line));
 
             this->m_shapes.push_back(circle);
-
-            auto circleDecorator = new CCircleDecorator(circle, circle->getRadius());
-
-            std::cout << circleDecorator->GetArea() << " " << circleDecorator->GetPerimeter() << std::endl;
         }
-        else  if (line.find(findRectangle) != std::string::npos)
+        else  if (line.find(rectangleStr) != std::string::npos)
         {
             auto rectangle = std::make_shared<sf::RectangleShape>(GetRectangle(line));
 
             this->m_shapes.push_back(rectangle);
-
-            auto rectangleDecorator = new CRectangleDecorator
-                    (rectangle, rectangle->getSize().x, rectangle->getSize().y);
-
-            std::cout << rectangleDecorator->GetArea() << " " << rectangleDecorator->GetPerimeter() << std::endl;
         }
-        else  if (line.find(findTriangle) != std::string::npos)
+        else  if (line.find(triangleStr) != std::string::npos)
         {
             auto triangle = std::make_shared<sf::ConvexShape>(GetTriangle(line));
 
             this->m_shapes.push_back(triangle);
-
-            auto triangleDecorator = new CConvexDecorator
-                    (triangle, triangle->getPoint(0), triangle->getPoint(0), triangle->getPoint(0));
-
-            std::cout << triangleDecorator->GetArea() << " " << triangleDecorator->GetPerimeter() << std::endl;
         }
     }
 }
 
 void CShapesHandler::Write()
 {
+    m_out << std::fixed << std::setprecision(precision);
+    for (int i = 0; i < this->m_shapes.size(); i++) {
+        if (sf::CircleShape* circle = dynamic_cast<sf::CircleShape*>(m_shapes[i].get()))
+        {
+            auto circleDecorator = new CCircleDecorator(std::make_shared<sf::CircleShape>(*circle), circle->getRadius());
 
+            m_out << circleStr << perimeter << circleDecorator->GetPerimeter()
+                << "; " << area  << circleDecorator->GetArea() << ";\n";
+        }
+        else if (sf::RectangleShape* rectangle = dynamic_cast<sf::RectangleShape*>(m_shapes[i].get()))
+        {
+            auto rectangleDecorator = new CRectangleDecorator(std::make_shared<sf::RectangleShape>(*rectangle),
+                    rectangle->getSize().x, rectangle->getSize().y);
+
+            m_out << rectangleStr << perimeter << rectangleDecorator->GetPerimeter()
+                  << "; " << area  << rectangleDecorator->GetArea() << ";\n";
+        }
+        else if (sf::ConvexShape* triangle = dynamic_cast<sf::ConvexShape*>(m_shapes[i].get()))
+        {
+            auto triangleDecorator = new CConvexDecorator
+                    (std::make_shared<sf::ConvexShape>(*triangle),
+                            triangle->getPoint(0), triangle->getPoint(1),
+                            triangle->getPoint(2));
+
+            m_out << triangleStr << perimeter << triangleDecorator->GetPerimeter()
+                  << "; " << area  << triangleDecorator->GetArea() << ";\n";
+        }
+        else
+        {
+            m_out << unknownShape;
+        }
+    }
 }
 
 void CShapesHandler::Draw()
 {
     sf::RenderWindow window(sf::VideoMode(windowWidth, windowsHeight), windowTitle);
-
-    window.setFramerateLimit(60);
 
     while (window.isOpen())
     {
@@ -95,7 +115,6 @@ void CShapesHandler::Draw()
 
         window.clear(sf::Color::White);
 
-        //std::cout << this->m_shapes.size() << std::endl;
         for (int i = 0; i < this->m_shapes.size(); i++)
         {
             window.draw(*this->m_shapes[i]);
@@ -113,7 +132,6 @@ sf::CircleShape CShapesHandler::GetCircle(std::string line)
     float x = std::stof(match[1]);
     float y = std::stof(match[2]);
     float radius = std::stof(match[3]);
-    //std::cout << x << " " << y  << " " << radius << std::endl;
 
     sf::CircleShape circle = sf::CircleShape(radius);
     circle.setPosition(x, y);
@@ -134,17 +152,14 @@ sf::RectangleShape CShapesHandler::GetRectangle(std::string line)
     float x2 = std::stof(match[3]);
     float y2 = std::stof(match[4]);
 
-    //std::cout << x1 << " " << y1  << " " << x2 << " " << y2 << std::endl;
-
     sf::Vector2f points = sf::Vector2f(x1, y1);
     sf::RectangleShape rectangle = sf::RectangleShape();
     rectangle.setPosition(points);
 
-    const float width = abs(x2 - x1);
-    const float height = abs(y2 - y1);
+    float width = abs(x2 - x1);
+    float height = abs(y2 - y1);
     rectangle.setSize(sf::Vector2f(width, height));
     rectangle.setFillColor(sf::Color::Green);
-    rectangle.setOutlineColor(sf::Color::Red);
 
     return rectangle;
 }
@@ -160,8 +175,6 @@ sf::ConvexShape CShapesHandler::GetTriangle(std::string line) {
     float y2 = std::stof(match[4]);
     float x3 = std::stof(match[5]);
     float y3 = std::stof(match[6]);
-
-    //std::cout << x1 << " " << y1  << " " << x2 << " " << y2 <<  x3 << " " << y3 << std::endl;
 
     sf::ConvexShape triangle = sf::ConvexShape();
     triangle.setPointCount(3);
