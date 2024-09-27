@@ -2,16 +2,22 @@
 #include "iostream"
 #include <SFML/Graphics.hpp>
 
-std::size_t CShapeDecorator::getPointCount() const
+double CShapeDecorator::GetArea() const
 {
-    return 0;
+    return shape->GetArea();
 }
 
-sf::Vector2f CShapeDecorator::getPoint(std::size_t index) const
+double CShapeDecorator::GetPerimeter() const
 {
-    return sf::Vector2f();
+    return shape->GetPerimeter();
 }
 
-CShapeDecorator::CShapeDecorator(std::shared_ptr<sf::Shape> shape) : m_shape(shape)
+void CShapeDecorator::Draw(sf::RenderWindow &window) const
 {
+    shape->Draw(window);
+}
+
+void CShapeDecorator::WriteToFile(std::ostream &outFile) const
+{
+    shape->WriteToFile(outFile);
 }

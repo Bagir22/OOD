@@ -3,6 +3,10 @@
 #include <fstream>
 #include <string>
 #include "CShapeHandler/CShapesHandler.h"
+#include "CBaseShape/CBaseShape.h"
+#include "CTriangle/CTriangle.h"
+#include "CDrawDecorator/CDrawDecorator.h"
+#include "CFileDecorator/CFileDecorator.h"
 
 const std::string inFileErr = "Input file doesn't exist\n";
 
@@ -16,7 +20,7 @@ int main()
     }
     std::ofstream out("output.txt");
 
-    std::vector<std::shared_ptr<sf::Shape> > shapes;
+    std::vector<std::shared_ptr<CBaseShape> > shapes;
 
     CShapesHandler handler = CShapesHandler(in, out, shapes);
 

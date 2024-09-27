@@ -1,13 +1,14 @@
 #include "iostream"
 #include "SFML/Graphics.hpp"
-#include "../CCircleDecorator/CCircleDecorator.h"
-#include "../CRectangleDecorator/CRectangleDecorator.h"
-#include "../CConvexDecorator/CConvexDecorator.h"
+#include "../CBaseShape/CBaseShape.h"
+#include "../CTriangle/CTriangle.h"
+#include "../CCircle/CCircle.h"
+#include "../CRectangle/CRectangle.h"
 
 class CShapesHandler
         {
 public:
-    CShapesHandler(std::istream& in, std::ostream& out, std::vector<std::shared_ptr<sf::Shape> >& shapes);
+    CShapesHandler(std::istream& in, std::ostream& out, std::vector<std::shared_ptr<CBaseShape> >& shapes);
 
     void Execute();
 private:
@@ -16,12 +17,12 @@ private:
 
     void GetShapes();
 
-    sf::CircleShape GetCircle(std::string line);
-    sf::RectangleShape GetRectangle(std::string line);
-    sf::ConvexShape GetTriangle(std::string line);
+    CCircle GetCircle(std::string line);
+    CRectangle GetRectangle(std::string line);
+    CTriangle GetTriangle(std::string line);
 
     std::istream& m_in;
     std::ostream& m_out;
 
-    std::vector<std::shared_ptr<sf::Shape> >& m_shapes;
+    std::vector<std::shared_ptr<CBaseShape> >& m_shapes;
 };
