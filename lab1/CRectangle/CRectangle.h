@@ -7,9 +7,8 @@ const std::string rectangleStr = "RECTANGLE: ";
 
 class CRectangle: public CBaseShape
 {
-    sf::RectangleShape rectangle;
 public:
-    CRectangle(std::vector<std::pair<float, float> > points)
+    CRectangle(std::vector<std::pair<double, double> > points)
     {
         rectangle.setPosition(points[0].first, points[0].second);
         rectangle.setSize(
@@ -24,8 +23,8 @@ public:
     void Draw(sf::RenderWindow& window) const override;
 
     void WriteToFile(std::ostream& outFile) const override;
-private:
-    std::vector<double> getSidesLength() const;
+protected:
+    sf::RectangleShape rectangle;
 };
 
 #endif

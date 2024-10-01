@@ -10,7 +10,6 @@ class CShapeDecorator : public CBaseShape
 {
 protected:
     std::shared_ptr<CBaseShape> shape;
-
 public:
     CShapeDecorator(std::shared_ptr<CBaseShape> shape) : shape(shape) {}
 

@@ -6,7 +6,7 @@
 #include "../CRectangle/CRectangle.h"
 
 class CShapesHandler
-        {
+{
 public:
     CShapesHandler(std::istream& in, std::ostream& out, std::vector<std::shared_ptr<CBaseShape> >& shapes);
 

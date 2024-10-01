@@ -2,15 +2,15 @@
 
 double CRectangle::GetArea() const
 {
-    auto area = rectangle.getSize().x * rectangle.getSize().y;
+    double area = rectangle.getSize().x * rectangle.getSize().y;
 
     return area;
 }
 
 double CRectangle::GetPerimeter() const
 {
-    float width = rectangle.getSize().x;
-    float height = rectangle.getSize().y;
+    double width = rectangle.getSize().x;
+    double height = rectangle.getSize().y;
 
     return 2 * (width + height);
 }

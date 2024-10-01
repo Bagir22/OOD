@@ -8,9 +8,8 @@ const std::string circleStr = "CIRCLE: ";
 
 class CCircle : public CBaseShape
 {
-    sf::CircleShape circle;
 public:
-    CCircle(float radius, float x, float y)
+    CCircle(double radius, double x, double y)
     {
         circle.setRadius(radius);
         circle.setPosition(x, y);
@@ -23,7 +22,8 @@ public:
     void Draw(sf::RenderWindow& window) const override;
 
     void WriteToFile(std::ostream& outFile) const override;
-
+protected:
+    sf::CircleShape circle;
 };
 
 #endif

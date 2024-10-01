@@ -10,7 +10,6 @@ class CFileDecorator : public CShapeDecorator
 {
 public:
     CFileDecorator(std::shared_ptr<CBaseShape> shape) : CShapeDecorator(shape) {}
-
     void WriteToFile(std::ostream& outFile) const override;
 };
 

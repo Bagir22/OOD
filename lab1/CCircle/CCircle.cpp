@@ -2,13 +2,13 @@
 
 double CCircle::GetArea() const
 {
-    auto area = static_cast<float>(M_PI * pow(circle.getRadius(), 2));
+    auto area = static_cast<double>(M_PI * pow(circle.getRadius(), 2));
     return area;
 }
 
 double CCircle::GetPerimeter() const
 {
-    auto perimeter = static_cast<float>(M_PI * circle.getRadius() * 2);
+    auto perimeter = static_cast<double>(M_PI * circle.getRadius() * 2);
     return perimeter;
 }
 

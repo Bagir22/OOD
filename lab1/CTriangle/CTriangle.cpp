@@ -23,10 +23,11 @@ double CTriangle::GetArea() const
     double semiperimeter = GetPerimeter() / 2.0;
     std::vector<double> sides = getSidesLength();
 
-    double area = std::sqrt(semiperimeter *
-                           (semiperimeter - sides[0]) *
-                           (semiperimeter - sides[1]) *
-                           (semiperimeter - sides[2]));
+
+    double area = std::sqrt(semiperimeter) *
+            std::sqrt(semiperimeter - sides[0]) *
+            std::sqrt(semiperimeter - sides[1]) *
+            std::sqrt(semiperimeter - sides[2]);
 
     return area;
 }

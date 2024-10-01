@@ -103,15 +103,16 @@ CTriangle CShapesHandler::GetTriangle(std::string line)
     std::smatch match;
 
     std::regex_search(line, match, trianglePattern);
-    float x1 = std::stof(match[1]);
-    float y1 = std::stof(match[2]);
-    float x2 = std::stof(match[3]);
-    float y2 = std::stof(match[4]);
-    float x3 = std::stof(match[5]);
-    float y3 = std::stof(match[6]);
+    double x1 = std::stof(match[1]);
+    double y1 = std::stof(match[2]);
+    double x2 = std::stof(match[3]);
+    double y2 = std::stof(match[4]);
+    double x3 = std::stof(match[5]);
+    double y3 = std::stof(match[6]);
 
     auto triangle = CTriangle(sf::Vector2f(x1, y1),
-                              sf::Vector2f(x2, y2), sf::Vector2f(x3, y3));
+                              sf::Vector2f(x2, y2),
+                              sf::Vector2f(x3, y3));
 
     return triangle;
 }
@@ -122,27 +123,28 @@ CCircle CShapesHandler::GetCircle(std::string line)
     std::smatch match;
 
     std::regex_search(line, match, circlePattern);
-    float x = std::stof(match[1]);
-    float y = std::stof(match[2]);
-    float radius = std::stof(match[3]);
+    double x = std::stof(match[1]);
+    double y = std::stof(match[2]);
+    double radius = std::stof(match[3]);
 
     auto circle = CCircle(radius, x, y);
 
     return circle;
 }
 
-CRectangle CShapesHandler::GetRectangle(std::string line) {
+CRectangle CShapesHandler::GetRectangle(std::string line)
+{
     std::regex rectanglePattern(parseRectangle);
     std::smatch match;
 
     std::regex_search(line, match, rectanglePattern);
 
-    float x1 = std::stof(match[1]);
-    float y1 = std::stof(match[2]);
-    float x2 = std::stof(match[3]);
-    float y2 = std::stof(match[4]);
+    double x1 = std::stof(match[1]);
+    double y1 = std::stof(match[2]);
+    double x2 = std::stof(match[3]);
+    double y2 = std::stof(match[4]);
 
-    std::vector<std::pair<float, float> > points;
+    std::vector<std::pair<double, double> > points;
     points.emplace_back(x1, y1);
     points.emplace_back(x2, y2);
     auto rectangle = CRectangle(points);

@@ -5,8 +5,8 @@
 
 const std::string triangleStr = "TRIANGLE: ";
 
-class CTriangle : public CBaseShape {
-    sf::ConvexShape triangle;
+class CTriangle : public CBaseShape
+{
 public:
     CTriangle(sf::Vector2f firstPoint, sf::Vector2f secondPoint, sf::Vector2f thirdPoint) {
         triangle.setPointCount(3);
@@ -22,6 +22,8 @@ public:
     void Draw(sf::RenderWindow& window) const override;
 
     void WriteToFile(std::ostream& outFile) const override;
+protected:
+    sf::ConvexShape triangle;
 private:
     std::vector<double> getSidesLength() const;
 };
